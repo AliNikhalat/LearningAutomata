@@ -1,3 +1,1 @@
-fala/__pycache__/__init__.cpython-37.pyc
-fala/fsla/__pycache__/tsetlin.cpython-37.pyc
-fala/fsla/__pycache__/__init__.cpython-37.pyc
+*.pyc 

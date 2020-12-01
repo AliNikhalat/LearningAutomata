@@ -1,3 +1,4 @@
 # LearningAutomata
-This Repository Contains :
-Finite State Learning Automata --> Tsetlin
+This Repository Contains :\
+Fixed Structure Learning Automata --> Tsetlin\
+Variable Structure Learning Automata --> VariableActionSet\
