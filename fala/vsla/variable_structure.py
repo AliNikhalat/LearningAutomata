@@ -1,5 +1,7 @@
 import random
+import math
 from numpy.random import choice
+from matplotlib import pyplot as plt
 
 
 class VariableStructure:
@@ -13,22 +15,74 @@ class VariableStructure:
 
         self.last_action = 0
 
-    def choose_action(self):
-        self.probability_sum = sum(self.action_probaility)
+        self.entropy = []
+        self.sum_probability = []
+        self.visual_action_probability = [[]
+                                          for _ in range(self.action_number)]
 
+    # *****************************************************************************************
+    def choose_action(self):
         self.last_action = self.__roulette_wheel_selection(
             self.action_probaility)
         return self.last_action
 
+    # *****************************************************************************************
     def receive_environment_signal(self, beta):
         if beta == 1:
             self.__punish_automata()
         else:
             self.__surprise_automata()
 
-        # self.__rescale_probability_vector()
-
         return
+
+    # *****************************************************************************************
+    def visualization_calculations(self):
+        self.entropy.append(self.__calculate_entropy())
+        self.sum_probability.append(sum(self.action_probaility))
+
+        for action in range(self.action_number):
+            self.visual_action_probability[action].append(
+                self.action_probaility[action])
+
+    # *****************************************************************************************
+
+    def visualize_entropy_data(self, iteration_number):
+        x_values = [i for i in range(iteration_number)]
+
+        plt.title('Entropy')
+        plt.xlabel('iteration')
+        plt.ylabel('entropy')
+
+        plt.plot(x_values, self.entropy)
+        plt.show()
+
+    # *****************************************************************************************
+    def visualize_sum_probability_data(self, iteration_number):
+        x_values = [i for i in range(iteration_number)]
+
+        plt.title('Sum Probability')
+        plt.xlabel('iteration')
+        plt.ylabel('sum')
+
+        plt.plot(x_values, self.sum_probability)
+        plt.show()
+
+    # *****************************************************************************************
+    def visualize_action_probability_data(self, iteration_number):
+        x_values = [i for i in range(iteration_number)]
+
+        plt.plot(
+            x_values, self.visual_action_probability[0], color='r', label='action 0')
+        plt.plot(
+            x_values, self.visual_action_probability[1], color='b', label='action 1')
+
+        plt.title('Action Probability')
+        plt.xlabel('iteration')
+        plt.ylabel('probability')
+
+        plt.legend(loc="upper left")
+
+        plt.show()
 
     # *****************************************************************************************
     def __roulette_wheel_selection(self, probability_list):
@@ -45,7 +99,7 @@ class VariableStructure:
 
     # *****************************************************************************************
     def __punish_automata(self):
-        for action in self.action_probaility:
+        for action in range(self.action_number):
             if action != self.last_action:
                 self.action_probaility[action] = (self.penalty_rate / (self.action_number - 1)) + (
                     1 - self.penalty_rate) * self.action_probaility[action]
@@ -57,7 +111,7 @@ class VariableStructure:
 
     # *****************************************************************************************
     def __surprise_automata(self):
-        for action in self.action_probaility:
+        for action in range(self.action_number):
             if action != self.last_action:
                 self.action_probaility[action] = (1 - self.reward_rate) * self.action_probaility[action]  # NOQA
             else:
@@ -68,9 +122,5 @@ class VariableStructure:
         return
 
     # *****************************************************************************************
-    # def __rescale_probability_vector(self):
-    #     for action in self.action_probaility:
-    #         self.action_probaility[action] = self.action_probaility[action] * \
-    #             self.action_probaility
-
-    #     return
+    def __calculate_entropy(self):
+        return -1 * sum([p * math.log(p, self.action_number) for p in self.action_probaility if p != 0])
