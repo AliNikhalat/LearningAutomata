@@ -1,9 +1,9 @@
 import sys
 import os
 sys.path.insert(0, os.path.abspath(
-    os.path.join(os.path.dirname(__file__), '..')))
+    os.path.join(os.path.dirname(__file__), '../../../..')))
 
-from fala.vsla.variable_structure import *  # NOQA
+from fala.p_model.vsla.variable_structure import *  # NOQA
 from environment.environment import *  # NOQA
 
 iteration_number = 1000
