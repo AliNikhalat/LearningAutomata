@@ -1,5 +1,5 @@
 # LearningAutomata
-This Repository Contains :\
+This Repository Contains :
 
 P-Model Fala :\
 Fixed Structure Learning Automata --> Tsetlin, StochasticTsetlin\
