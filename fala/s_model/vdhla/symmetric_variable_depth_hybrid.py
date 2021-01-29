@@ -31,6 +31,10 @@ class SymmetricVariableDepthHybrid:
         self.variable_action_set_first_run = True
 
         self.total_number_of_rewards = []
+        self.total_number_of_action_switching = []
+
+        self.action_selection_status = [[]
+                                        for _ in range(self.fsla_action_number)]
 
     # *****************************************************************************************
     def choose_action(self):
@@ -52,14 +56,36 @@ class SymmetricVariableDepthHybrid:
                 0 + self.total_number_of_rewards[-1] if len(self.total_number_of_rewards) > 0 else 0)
         else:
             self.__suprise_automata()
+
             self.total_number_of_rewards.append(
                 1 + self.total_number_of_rewards[-1] if len(self.total_number_of_rewards) > 0 else 1)
+            self.total_number_of_action_switching.append(
+                0 + self.total_number_of_action_switching[-1] if len(self.total_number_of_action_switching) > 0 else 0)
         return
+
+    # *****************************************************************************************
+    def visualization_calculations(self):
+        for action in range(self.fsla_action_number):
+            if action == self.fsla_chosen_action:
+                self.action_selection_status[action].append(
+                    1 + self.action_selection_status[action][-1] if len(self.action_selection_status[action]) > 0 else 1)
+            else:
+                self.action_selection_status[action].append(
+                    0 + self.action_selection_status[action][-1] if len(self.action_selection_status[action]) > 0 else 0)
 
     # *****************************************************************************************
     @property
     def get_total_number_of_rewards(self):
         return self.total_number_of_rewards
+
+    # *****************************************************************************************
+    @property
+    def get_total_number_of_action_switching(self):
+        return self.total_number_of_action_switching
+
+    # *****************************************************************************************
+    def get_action_selection_status(self, action_number):
+        return self.action_selection_status[action_number]
 
     # *****************************************************************************************
     def __suprise_automata(self):
@@ -78,6 +104,9 @@ class SymmetricVariableDepthHybrid:
             self.fsla_chosen_action_depth_status -= 1
 
             self.fsla_state_transition_counter += 1
+
+            self.total_number_of_action_switching.append(
+                0 + self.total_number_of_action_switching[-1] if len(self.total_number_of_action_switching) > 0 else 0)
         else:
             if not self.variable_action_set_first_run:
                 self.__evaluate_variable_action_set()
@@ -110,6 +139,9 @@ class SymmetricVariableDepthHybrid:
 
         self.fsla_state_transition_counter = 1
         self.fsla_depth_transition_counter = 0
+
+        self.total_number_of_action_switching.append(
+            1 + self.total_number_of_action_switching[-1] if len(self.total_number_of_action_switching) > 0 else 1)
 
         return
 

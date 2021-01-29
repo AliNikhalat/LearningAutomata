@@ -20,18 +20,38 @@ class VariableStructure:
         self.visual_action_probability = [[]
                                           for _ in range(self.action_number)]
 
+        self.total_number_of_rewards = []
+        self.total_number_of_action_switching = []
+
     # *****************************************************************************************
     def choose_action(self):
+        previous_last_action = self.last_action
+
         self.last_action = self.__roulette_wheel_selection(
             self.action_probaility)
+
+        if len(self.total_number_of_action_switching) > 0:
+            if previous_last_action != self.last_action:
+                self.total_number_of_action_switching.append(
+                    1 + self.total_number_of_action_switching[-1])
+            else:
+                self.total_number_of_action_switching.append(
+                    0 + self.total_number_of_action_switching[-1])
+        else:
+            self.total_number_of_action_switching.append(0)
+
         return self.last_action
 
     # *****************************************************************************************
     def receive_environment_signal(self, beta):
         if beta == 1:
             self.__punish_automata()
+            self.total_number_of_rewards.append(
+                0 + self.total_number_of_rewards[-1] if len(self.total_number_of_rewards) > 0 else 0)
         else:
             self.__surprise_automata()
+            self.total_number_of_rewards.append(
+                1 + self.total_number_of_rewards[-1] if len(self.total_number_of_rewards) > 0 else 1)
 
         return
 
@@ -83,6 +103,16 @@ class VariableStructure:
         plt.legend(loc="upper left")
 
         plt.show()
+
+     # *****************************************************************************************
+    @property
+    def get_total_number_of_rewards(self):
+        return self.total_number_of_rewards
+
+    # *****************************************************************************************
+    @property
+    def get_total_number_of_action_switching(self):
+        return self.total_number_of_action_switching
 
     # *****************************************************************************************
     def __roulette_wheel_selection(self, probability_list):
