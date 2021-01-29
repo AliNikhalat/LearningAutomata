@@ -15,7 +15,7 @@ penalty_rate = 0.01
 learning_automata = VariableStructure(
     action_number, reward_rate, penalty_rate)
 
-action_probability_list = [0.8, 0.2]
+action_probability_list = [0.5, 0.5]
 environment = Environment(action_number, action_probability_list)
 
 

@@ -98,11 +98,14 @@ class VariableActionSet:
 
     # *****************************************************************************************
     def __update_action_probability(self, beta):
+        num_of_available_action = sum(
+            x != 0 for x in self.sub_action_probability)
+
         for action in range(len(self.sub_action_probability)):
             if action != self.last_action and self.sub_action_probability[action] != 0:
                 self.sub_action_probability[action] = self.sub_action_probability[action] - self.reward_rate * (
-                    1 - beta) * self.sub_action_probability[action] + self.penalty_rate * beta * ((1 / (self.action_number - 1)) - self.sub_action_probability[action])
-            else:
+                    1 - beta) * self.sub_action_probability[action] + self.penalty_rate * beta * ((1 / (num_of_available_action - 1)) - self.sub_action_probability[action])
+            elif action == self.last_action and self.sub_action_probability[action] != 0:
                 self.sub_action_probability[action] = self.sub_action_probability[action] + self.reward_rate * (1 - beta) * (
                     1 - self.sub_action_probability[action]) - self.penalty_rate * beta * self.sub_action_probability[action]
         return
@@ -110,7 +113,8 @@ class VariableActionSet:
     # *****************************************************************************************
     def __rescale_action_probability_vector(self):
         for action in range(len(self.sub_action_probability)):
-            self.action_probaility[action] = self.sub_action_probability[action] * \
-                self.sub_action_probability_sum
+            if self.sub_action_probability[action] != 0:
+                self.action_probaility[action] = self.sub_action_probability[action] * \
+                    self.sub_action_probability_sum
 
         return

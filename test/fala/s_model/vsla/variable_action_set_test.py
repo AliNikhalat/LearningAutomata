@@ -6,17 +6,17 @@ sys.path.insert(0, os.path.abspath(
 from fala.s_model.vsla.variable_action_set import *  # NOQA
 from environment.environment import *  # NOQA
 
-iteration_number = 50
+iteration_number = 1000
 
-action_number = 2
+action_number = 3
 reward_rate = 0.1
-penalty_rate = 0.01
+penalty_rate = 0.001
 
 learning_automata = VariableActionSet(
     action_number, reward_rate, penalty_rate)
 
 
-action_probability_list = [0.8, 0.2]
+action_probability_list = [0.5, 0.5, 0.7]
 environment = Environment(action_number, action_probability_list)
 
 for _ in range(iteration_number):
