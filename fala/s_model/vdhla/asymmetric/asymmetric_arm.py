@@ -35,11 +35,9 @@ class AsymmetricArm:
     # *****************************************************************************************
     def receive_environment_signal(self, beta):
         if beta == 1:
-            self.__punish_automata()
+            return self.__punish_automata()
         else:
-            self.__suprise_automata()
-
-        return
+            return self.__suprise_automata()
 
     # *****************************************************************************************
     def __suprise_automata(self):
@@ -51,7 +49,7 @@ class AsymmetricArm:
         if self.__is_fsla_on_depth():
             self.__fsla_depth_transition_counter += 1
 
-        return
+        return False
 
     # *****************************************************************************************
     def __punish_automata(self):
@@ -59,6 +57,8 @@ class AsymmetricArm:
             self.__fsla_depth_status -= 1
 
             self.__fsla_state_transition_counter += 1
+
+            return False
 
         else:
             if not self.__first_action_switching:
@@ -75,7 +75,7 @@ class AsymmetricArm:
 
             self.__arm_manager.arm_switching_notification()
 
-        return
+            return True
 
     # *****************************************************************************************
     def __is_fsla_on_depth(self):

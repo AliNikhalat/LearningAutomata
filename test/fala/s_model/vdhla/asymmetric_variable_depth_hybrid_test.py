@@ -7,17 +7,17 @@ from fala.s_model.vdhla.asymmetric_variable_depth_hybrid import *  # NOQA
 from environment.environment import *  # NOQA
 
 
-iteration_number = 20000
+iteration_number = 1000
 
 action_number = 2
 state_number = 2
 reward_rate = 0.1
-penalty_rate = 0.01
+penalty_rate = 0
 
 learning_automata = AsymmetricVariableDepthHybrid(
     action_number, state_number, reward_rate, penalty_rate)
 
-action_probability_list = [0.5, 0.5]
+action_probability_list = [0.9, 0.1]
 environment = Environment(action_number, action_probability_list)
 
 for i in range(iteration_number):
@@ -31,4 +31,5 @@ for i in range(iteration_number):
     learning_automata.receive_environment_signal(evaluated_action_vdhla)
 
 
-print(learning_automata.choose_action)
+print(learning_automata.get_total_number_of_rewards)
+print(learning_automata.get_total_number_of_action_switching)
