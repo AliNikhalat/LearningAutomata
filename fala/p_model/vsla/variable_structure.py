@@ -23,6 +23,9 @@ class VariableStructure:
         self.total_number_of_rewards = []
         self.total_number_of_action_switching = []
 
+        self.action_selection_status = [[]
+                                        for _ in range(self.action_number)]
+
     # *****************************************************************************************
     def choose_action(self):
         previous_last_action = self.last_action
@@ -63,6 +66,13 @@ class VariableStructure:
         for action in range(self.action_number):
             self.visual_action_probability[action].append(
                 self.action_probaility[action])
+
+            if action == self.last_action:
+                self.action_selection_status[action].append(
+                    1 + self.action_selection_status[action][-1] if len(self.action_selection_status[action]) > 0 else 1)
+            else:
+                self.action_selection_status[action].append(
+                    0 + self.action_selection_status[action][-1] if len(self.action_selection_status[action]) > 0 else 0)
 
     # *****************************************************************************************
 
@@ -113,6 +123,10 @@ class VariableStructure:
     @property
     def get_total_number_of_action_switching(self):
         return self.total_number_of_action_switching
+
+    # *****************************************************************************************
+    def get_action_selection_status(self, action_number):
+        return self.action_selection_status[action_number]
 
     # *****************************************************************************************
     def __roulette_wheel_selection(self, probability_list):

@@ -2,7 +2,7 @@ import numpy
 import random
 
 
-class Environment:
+class StaticEnvironment:
     def __init__(self, action_number, action_probability_list):
         self.action_number = action_number
         self.action_probability_list = action_probability_list
