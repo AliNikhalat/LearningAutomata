@@ -19,6 +19,7 @@ class SymmetricVariableDepthHybrid:
         self.fsla_chosen_action_depth_status = 0
         self.fsla_state_transition_counter = 0
         self.fsla_depth_transition_counter = 0
+        self.fsla_min_state = 2
 
         ''' 
             grow --> Action 0
@@ -157,7 +158,7 @@ class SymmetricVariableDepthHybrid:
     # *****************************************************************************************
     def __update_fsla_depth(self):
         new_depth_decision = 0
-        if self.fsla_state_number > 1:
+        if self.fsla_state_number > self.fsla_min_state:
             new_depth_decision = self.variable_action_set.choose_action([0, 1, 2])  # NOQA
         else:
             new_depth_decision = self.variable_action_set.choose_action([0, 1])

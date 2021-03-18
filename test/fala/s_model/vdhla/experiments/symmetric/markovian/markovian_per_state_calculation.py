@@ -11,12 +11,12 @@ from environment.markovian_switching import *  # NOQA
 iteration_number = 10000
 
 
-action_number = 2
-reward_rate = 0.1
-penalty_rate = 0
+action_number = 5
+reward_rate = 0.01
+penalty_rate = 0.1
 
 s_vdhla1 = SymmetricVariableDepthHybrid(
-    action_number, 1, reward_rate, penalty_rate)
+    action_number, 2, reward_rate, penalty_rate)
 s_vdhla3 = SymmetricVariableDepthHybrid(
     action_number, 3, reward_rate, penalty_rate)
 s_vdhla5 = SymmetricVariableDepthHybrid(
@@ -40,25 +40,48 @@ favorable3_action_probability = []
 favorable5_action_probability = []
 favorable7_action_probability = []
 
-state_probability = [[0.9, 0.1],
-                     [0.1, 0.9]]
+state_probability = [[0.9, 0.1, 0.3, 0.7, 0.1],
+                     [0.1, 0.9, 0.7, 0.6, 0.2],
+                     [0.3, 0.7, 0.5, 0.5, 0.3],
+                     [0.9, 0.9, 0.9, 0.4, 0.6]]
 
-transition_probability = [[0.9, 0.1],
-                          [0.1, 0.9]]
+transition_probability = [[0.3, 0.2, 0.1, 0.4],
+                          [0.1, 0.2, 0.5, 0.2],
+                          [0.2, 0.2, 0.2, 0.6],
+                          [0.2, 0.5, 0.1, 0.2],
+                          [0.2, 0.1, 0.3, 0.4],
+                          [0.4, 0.1, 0.1, 0.4]]
 
-get_status = 0
+state_number = 3
 
-dominant_action_state1 = 0
-dominant_action_state2 = 1
-
-state1_dominant = []
-state2_dominant = []
-
-state1_dominant_chosen = []
-state2_dominant_chosen = []
 
 environment = SequenceMarkovianEnvironment(
     action_number, state_probability, transition_probability, iteration_number)
+environment_sequence = environment.get_seqeunce()
+
+dominant_actions = [state.index(max(state))
+                    for state in state_probability]
+
+dominant_chosen_vdhla_1 = [[] for _ in range(len(state_probability))]
+dominant_chosen_vdhla_3 = [[] for _ in range(len(state_probability))]
+dominant_chosen_vdhla_5 = [[] for _ in range(len(state_probability))]
+dominant_chosen_vdhla_7 = [[] for _ in range(len(state_probability))]
+
+dominant_chosen_fsla_1 = [[] for _ in range(len(state_probability))]
+dominant_chosen_fsla_3 = [[] for _ in range(len(state_probability))]
+dominant_chosen_fsla_5 = [[] for _ in range(len(state_probability))]
+dominant_chosen_fsla_7 = [[] for _ in range(len(state_probability))]
+
+
+def calculate_dominants_per_state(dominant_chosen, environment_state, action, evaluation):
+    for state in range(len(state_probability)):
+        if dominant_actions[state] == action and state == environment_state and evaluation == 0:
+            dominant_chosen[state].append(
+                1 + dominant_chosen[state][-1] if len(dominant_chosen[state]) > 0 else 1)
+        else:
+            dominant_chosen[state].append(
+                0 + dominant_chosen[state][-1] if len(dominant_chosen[state]) > 0 else 0)
+
 
 for i in range(iteration_number):
     # vdhla 1 state
@@ -73,8 +96,8 @@ for i in range(iteration_number):
     s_vdhla1.receive_environment_signal(evaluated_action_vdhla1)
     s_vdhla1.visualization_calculations()
 
-    favorable1_vdhla_action_probability.append(
-        s_vdhla1.get_action_selection_status(get_status)[-1] / (i + 1))
+    calculate_dominants_per_state(dominant_chosen_vdhla_1,
+                                  environment_sequence[i], chosen_action_1_vdhla, evaluated_action_vdhla1)
 
     # vdhla 3 state
     chosen_action_3_vdhla = 0
@@ -88,8 +111,8 @@ for i in range(iteration_number):
     s_vdhla3.receive_environment_signal(evaluated_action_vdhla3)
     s_vdhla3.visualization_calculations()
 
-    favorable3_vdhla_action_probability.append(
-        s_vdhla3.get_action_selection_status(get_status)[-1] / (i + 1))
+    calculate_dominants_per_state(dominant_chosen_vdhla_3,
+                                  environment_sequence[i], chosen_action_3_vdhla, evaluated_action_vdhla3)
 
     # vdhla 5 state
     chosen_action_5_vdhla = 0
@@ -103,8 +126,8 @@ for i in range(iteration_number):
     s_vdhla5.receive_environment_signal(evaluated_action_vdhla5)
     s_vdhla5.visualization_calculations()
 
-    favorable5_vdhla_action_probability.append(
-        s_vdhla5.get_action_selection_status(get_status)[-1] / (i + 1))
+    calculate_dominants_per_state(dominant_chosen_vdhla_5,
+                                  environment_sequence[i], chosen_action_5_vdhla, evaluated_action_vdhla5)
 
     # vdhla 7 state
     chosen_action_7_vdhla = 0
@@ -118,8 +141,8 @@ for i in range(iteration_number):
     s_vdhla7.receive_environment_signal(evaluated_action_vdhla7)
     s_vdhla7.visualization_calculations()
 
-    favorable7_vdhla_action_probability.append(
-        s_vdhla7.get_action_selection_status(get_status)[-1] / (i + 1))
+    calculate_dominants_per_state(dominant_chosen_vdhla_7,
+                                  environment_sequence[i], chosen_action_7_vdhla, evaluated_action_vdhla7)
 
     # 1 state
     chosen_action_1 = 0
@@ -132,8 +155,8 @@ for i in range(iteration_number):
     tsetlin_1state.receive_environment_signal(evaluated_action_1)
     tsetlin_1state.visualization_calculations()
 
-    favorable1_action_probability.append(
-        tsetlin_1state.get_action_selection_status(get_status)[-1] / (i + 1))
+    calculate_dominants_per_state(dominant_chosen_fsla_1,
+                                  environment_sequence[i], chosen_action_1, evaluated_action_1)
 
     # 3 state
     chosen_action_3 = 0
@@ -146,8 +169,8 @@ for i in range(iteration_number):
     tsetlin_3state.receive_environment_signal(evaluated_action_3)
     tsetlin_3state.visualization_calculations()
 
-    favorable3_action_probability.append(
-        tsetlin_3state.get_action_selection_status(get_status)[-1] / (i + 1))
+    calculate_dominants_per_state(dominant_chosen_fsla_3,
+                                  environment_sequence[i], chosen_action_3, evaluated_action_3)
 
     # 5 state
     chosen_action_5 = 0
@@ -160,8 +183,8 @@ for i in range(iteration_number):
     tsetlin_5state.receive_environment_signal(evaluated_action_5)
     tsetlin_5state.visualization_calculations()
 
-    favorable5_action_probability.append(
-        tsetlin_5state.get_action_selection_status(get_status)[-1] / (i + 1))
+    calculate_dominants_per_state(dominant_chosen_fsla_5,
+                                  environment_sequence[i], chosen_action_5, evaluated_action_5)
 
     # 7 state
     chosen_action_7 = 0
@@ -174,11 +197,16 @@ for i in range(iteration_number):
     tsetlin_7state.receive_environment_signal(evaluated_action_7)
     tsetlin_7state.visualization_calculations()
 
-    favorable7_action_probability.append(
-        tsetlin_7state.get_action_selection_status(get_status)[-1] / (i + 1))
+    calculate_dominants_per_state(dominant_chosen_fsla_7,
+                                  environment_sequence[i], chosen_action_7, evaluated_action_7)
 
     environment.goto_next_episode()
 
+
+print(s_vdhla1.fsla_chosen_action_depth_status)
+print(s_vdhla3.fsla_chosen_action_depth_status)
+print(s_vdhla5.fsla_chosen_action_depth_status)
+print(s_vdhla7.fsla_chosen_action_depth_status)
 
 print('VDHLA 1 : TNR {}'.format(s_vdhla1.total_number_of_rewards[-1]))
 print('VDHLA 1 : TNAS {}'.format(
@@ -206,37 +234,64 @@ print('FSLA 7 : TNR {}'.format(tsetlin_7state.total_number_of_rewards[-1]))
 print('FSLA 7 : TNAS {}'.format(
     tsetlin_7state.total_number_of_action_switching[-1]))
 
+#############################Per State Calculation ################################
+
 # Plots
 x_values = [i for i in range(iteration_number)]
 
-plt.plot(x_values, favorable1_vdhla_action_probability,
+plt.plot(x_values, dominant_chosen_vdhla_1[state_number],
          color='g', label='VDHLA(N=1)')
-plt.plot(x_values, favorable3_vdhla_action_probability,
+plt.plot(x_values, dominant_chosen_vdhla_3[state_number],
          color='b', label='VDHLA(N=3)')
-plt.plot(x_values, favorable5_vdhla_action_probability,
+plt.plot(x_values, dominant_chosen_vdhla_5[state_number],
          color='r', label='VDHLA(N=5)')
-plt.plot(x_values, favorable7_vdhla_action_probability,
+plt.plot(x_values, dominant_chosen_vdhla_7[state_number],
          color='y', label='VDHLA(N=7)')
 
-plt.plot(x_values, favorable1_action_probability,
+plt.plot(x_values, dominant_chosen_fsla_1[state_number],
          color='g', label='Tsetlin(N=1)', linestyle='dashed')
-plt.plot(x_values, favorable3_action_probability,
+plt.plot(x_values, dominant_chosen_fsla_3[state_number],
          color='b', label='Tsetlin(N=3)', linestyle='dashed')
-plt.plot(x_values, favorable5_action_probability,
+plt.plot(x_values, dominant_chosen_fsla_5[state_number],
          color='r', label='Tsetlin(N=5)', linestyle='dashed')
-plt.plot(x_values, favorable7_action_probability,
+plt.plot(x_values, dominant_chosen_fsla_7[state_number],
          color='y', label='Tsetlin(N=7)', linestyle='dashed')
 
-plt.title('FSLA Comparison-Ex2.1.1')
+plt.title('VDHLA-FSLA Dominant Action PerState Comparison')
 plt.xlabel('iteration')
-plt.ylabel('favorable')
+plt.ylabel('dominant')
 
 plt.legend(loc="lower right")
 
 plt.show()
 
+#################################################################################
 
-print(s_vdhla1.fsla_chosen_action_depth_status)
-print(s_vdhla3.fsla_chosen_action_depth_status)
-print(s_vdhla5.fsla_chosen_action_depth_status)
-print(s_vdhla7.fsla_chosen_action_depth_status)
+# Plots
+# x_values = [i for i in range(iteration_number)]
+
+# plt.plot(x_values, dominant_chosen_vdhla_1[state_number],
+#          color='g', label='VDHLA(N=1)')
+# plt.plot(x_values, dominant_chosen_vdhla_3[state_number],
+#          color='b', label='VDHLA(N=3)')
+# plt.plot(x_values, dominant_chosen_vdhla_5[state_number],
+#          color='r', label='VDHLA(N=5)')
+# plt.plot(x_values, dominant_chosen_vdhla_7[state_number],
+#          color='y', label='VDHLA(N=7)')
+
+# plt.plot(x_values, dominant_chosen_fsla_1[state_number],
+#          color='g', label='Tsetlin(N=1)', linestyle='dashed')
+# plt.plot(x_values, dominant_chosen_fsla_3[state_number],
+#          color='b', label='Tsetlin(N=3)', linestyle='dashed')
+# plt.plot(x_values, dominant_chosen_fsla_5[state_number],
+#          color='r', label='Tsetlin(N=5)', linestyle='dashed')
+# plt.plot(x_values, dominant_chosen_fsla_7[state_number],
+#          color='y', label='Tsetlin(N=7)', linestyle='dashed')
+
+# plt.title('VDHLA-FSLA Dominant Action PerState Comparison')
+# plt.xlabel('iteration')
+# plt.ylabel('dominant')
+
+# plt.legend(loc="lower right")
+
+# plt.show()

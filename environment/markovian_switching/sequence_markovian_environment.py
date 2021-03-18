@@ -12,7 +12,10 @@ class SequenceMarkovianEnvironment:
         self.episode = 0
 
         self.__create_seqeunce()
-        print(len(self.sequence))
+
+        self.dominant_actions = [state.index(max(state))
+                                 for state in state_probability]
+        self.dominant_chosen = [[] for _ in range(len(self.state_probability))]
 
     def evaluate_action(self, action):
         random_envionment_number = SequenceMarkovianEnvironment.generate_random_number()
@@ -30,6 +33,9 @@ class SequenceMarkovianEnvironment:
 
         return
 
+    def get_seqeunce(self):
+        return self.sequence
+
     def __create_seqeunce(self):
         for _ in range(self.sequence_number - 1):
             random_transition_number = SequenceMarkovianEnvironment.generate_random_number()
@@ -42,6 +48,6 @@ class SequenceMarkovianEnvironment:
                     self.sequence.append(index)
                     break
 
-    @staticmethod
+    @ staticmethod
     def generate_random_number():
         return random.uniform(0, 1)
