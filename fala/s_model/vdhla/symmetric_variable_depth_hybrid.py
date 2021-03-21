@@ -19,7 +19,7 @@ class SymmetricVariableDepthHybrid:
         self.fsla_chosen_action_depth_status = 0
         self.fsla_state_transition_counter = 0
         self.fsla_depth_transition_counter = 0
-        self.fsla_min_state = 2
+        self.fsla_min_state = 1
 
         ''' 
             grow --> Action 0

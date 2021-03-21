@@ -6,7 +6,7 @@ sys.path.insert(0, os.path.abspath(
 
 from fala.s_model.vdhla.symmetric_variable_depth_hybrid import *  # NOQA
 from fala.p_model.vsla.variable_structure import *  # NOQA
-from environment.environment import *  # NOQA
+from environment.static.static_environment import *  # NOQA
 
 iteration_number = 1000
 
@@ -29,7 +29,7 @@ penalty_rate = 0.01
 
 
 # action_probability_list = [0.1, 0.9]
-# environment = Environment(action_number, action_probability_list)
+# environment = StaticEnvironment(action_number, action_probability_list)
 
 # for i in range(iteration_number):
 #     # Symmetric VDHLA Tests --> N=1
@@ -83,7 +83,7 @@ penalty_rate = 0.01
 
 
 # action_probability_list = [0.3, 0.7]
-# environment = Environment(action_number, action_probability_list)
+# environment = StaticEnvironment(action_number, action_probability_list)
 
 # for i in range(iteration_number):
 #     # Symmetric VDHLA Tests --> N=1
@@ -137,7 +137,7 @@ pure_chance_automata = VariableStructure(action_number, 0, 0)
 
 
 action_probability_list = [0.5, 0.5]
-environment = Environment(action_number, action_probability_list)
+environment = StaticEnvironment(action_number, action_probability_list)
 
 for i in range(iteration_number):
     # Symmetric VDHLA Tests --> N=1
@@ -196,7 +196,7 @@ plt.plot(x_values, s_vdhla_6.get_total_number_of_rewards,
 plt.plot(x_values, pure_chance_automata.get_total_number_of_rewards,
          color='b', label='Pure Chance')
 
-plt.title('Expediency-Ex1.3')
+plt.title('Pure Chance Comparison-Ex1.1.3')
 plt.xlabel('Iteration')
 plt.ylabel('TNR')
 

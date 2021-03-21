@@ -11,9 +11,9 @@ from environment.markovian_switching import *  # NOQA
 iteration_number = 10000
 
 
-action_number = 5
+action_number = 2
 reward_rate = 0.01
-penalty_rate = 0.1
+penalty_rate = 0.01
 
 s_vdhla1 = SymmetricVariableDepthHybrid(
     action_number, 2, reward_rate, penalty_rate)
@@ -40,19 +40,25 @@ favorable3_action_probability = []
 favorable5_action_probability = []
 favorable7_action_probability = []
 
-state_probability = [[0.9, 0.1, 0.1, 0.1, 0.1],
-                     [0.1, 0.9, 0.1, 0.1, 0.1],
-                     [0.1, 0.1, 0.9, 0.1, 0.1],
-                     [0.1, 0.1, 0.1, 0.9, 0.1],
-                     [0.5, 0.5, 0.5, 0.5, 0.5],
-                     [0.1, 0.1, 0.1, 0.1, 0.1]]
+# state_probability = [[0.9, 0.1, 0.1, 0.1, 0.1],
+#                      [0.1, 0.9, 0.1, 0.1, 0.1],
+#                      [0.1, 0.1, 0.9, 0.1, 0.1],
+#                      [0.1, 0.1, 0.1, 0.9, 0.1],
+#                      [0.5, 0.5, 0.5, 0.5, 0.5],
+#                      [0.1, 0.1, 0.1, 0.1, 0.1]]
 
-transition_probability = [[0.1, 0.4, 0.1, 0.1, 0.15, 0.15],
-                          [0.1, 0.1, 0.4, 0.1, 0.15, 0.15],
-                          [0.1, 0.1, 0.1, 0.4, 0.15, 0.15],
-                          [0.4, 0.1, 0.1, 0.1, 0.15, 0.15],
-                          [0.1, 0.1, 0.2, 0.2, 0.2, 0.2],
-                          [0.2, 0.1, 0.1, 0.2, 0.1, 0.3]]
+# transition_probability = [[0.1, 0.4, 0.1, 0.1, 0.15, 0.15],
+#                           [0.1, 0.1, 0.4, 0.1, 0.15, 0.15],
+#                           [0.1, 0.1, 0.1, 0.4, 0.15, 0.15],
+#                           [0.4, 0.1, 0.1, 0.1, 0.15, 0.15],
+#                           [0.1, 0.1, 0.2, 0.2, 0.2, 0.2],
+#                           [0.2, 0.1, 0.1, 0.2, 0.1, 0.3]]
+
+state_probability = [[0.8, 0.2],
+                     [0.6, 0.4]]
+
+transition_probability = [[0.3, 0.7],
+                          [0.7, 0.3]]
 
 get_status = 0
 

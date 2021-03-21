@@ -8,9 +8,9 @@ from fala.s_model.vdhla.symmetric_variable_depth_hybrid import *  # NOQA
 from fala.p_model.fsla.tsetlin import *  # NOQA
 from environment.static.static_environment import *  # NOQA
 
-iteration_number = 100000
+iteration_number = 1000
 
-action_number = 2
+action_number = 9
 reward_rate = 0.1
 penalty_rate = 0
 
@@ -28,8 +28,9 @@ tsetlin_3state = Tsetlin(3, action_number)
 tsetlin_5state = Tsetlin(5, action_number)
 tsetlin_7state = Tsetlin(7, action_number)
 
-# action_probability_list = [0.8, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02]
-action_probability_list = [0.8, 0.2]
+action_probability_list = [0.8, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02]
+# action_probability_list = [0.8, 0.05, 0.05, 0.05, 0.05]
+#action_probability_list = [0.8, 0.2]
 environment = StaticEnvironment(action_number, action_probability_list)
 
 favorable1_vdhla_action_probability = []
@@ -159,40 +160,10 @@ for i in range(iteration_number):
     favorable7_action_probability.append(
         tsetlin_7state.get_action_selection_status(0)[-1] / (i + 1))
 
-print(s_vdhla1.fsla_chosen_action_depth_status)
-print(s_vdhla3.fsla_chosen_action_depth_status)
-print(s_vdhla5.fsla_chosen_action_depth_status)
-print(s_vdhla7.fsla_chosen_action_depth_status)
-
-# Plots
-x_values = [i for i in range(iteration_number)]
-
-plt.plot(x_values, favorable1_vdhla_action_probability,
-         color='g', label='VDHLA(N=1)')
-plt.plot(x_values, favorable3_vdhla_action_probability,
-         color='b', label='VDHLA(N=3)')
-plt.plot(x_values, favorable5_vdhla_action_probability,
-         color='r', label='VDHLA(N=5)')
-plt.plot(x_values, favorable7_vdhla_action_probability,
-         color='y', label='VDHLA(N=7)')
-
-plt.plot(x_values, favorable1_action_probability,
-         color='g', label='Tsetlin(N=1)', linestyle='dashed')
-plt.plot(x_values, favorable3_action_probability,
-         color='b', label='Tsetlin(N=3)', linestyle='dashed')
-plt.plot(x_values, favorable5_action_probability,
-         color='r', label='Tsetlin(N=5)', linestyle='dashed')
-plt.plot(x_values, favorable7_action_probability,
-         color='y', label='Tsetlin(N=7)', linestyle='dashed')
-
-plt.title('FSLA Comparison-Ex1.2.1.3')
-plt.xlabel('iteration')
-plt.ylabel('favorable')
-
-plt.legend(loc="lower right")
-
-plt.show()
-
+print(s_vdhla1.fsla_state_number)
+print(s_vdhla3.fsla_state_number)
+print(s_vdhla5.fsla_state_number)
+print(s_vdhla7.fsla_state_number)
 
 print('VDHLA 1 : TNR {}'.format(s_vdhla1.total_number_of_rewards[-1]))
 print('VDHLA 1 : TNAS {}'.format(
@@ -219,3 +190,32 @@ print('FSLA 5 : TNAS {}'.format(
 print('FSLA 7 : TNR {}'.format(tsetlin_7state.total_number_of_rewards[-1]))
 print('FSLA 7 : TNAS {}'.format(
     tsetlin_7state.total_number_of_action_switching[-1]))
+
+# Plots
+x_values = [i for i in range(iteration_number)]
+
+plt.plot(x_values, favorable1_vdhla_action_probability,
+         color='g', label='Symmetric VDHLA(N=1)')
+plt.plot(x_values, favorable3_vdhla_action_probability,
+         color='b', label='Symmetric VDHLA(N=3)')
+plt.plot(x_values, favorable5_vdhla_action_probability,
+         color='r', label='Symmetric VDHLA(N=5)')
+plt.plot(x_values, favorable7_vdhla_action_probability,
+         color='y', label='Symmetric VDHLA(N=7)')
+
+plt.plot(x_values, favorable1_action_probability,
+         color='g', label='Tsetlin(N=1)', linestyle='dashed')
+plt.plot(x_values, favorable3_action_probability,
+         color='b', label='Tsetlin(N=3)', linestyle='dashed')
+plt.plot(x_values, favorable5_action_probability,
+         color='r', label='Tsetlin(N=5)', linestyle='dashed')
+plt.plot(x_values, favorable7_action_probability,
+         color='y', label='Tsetlin(N=7)', linestyle='dashed')
+
+plt.title('FSLA Comparison-Ex1.2.1.3')
+plt.xlabel('Iteration')
+plt.ylabel('Probability of choosing favorable action(a1)')
+
+plt.legend(loc="lower right")
+
+plt.show()
