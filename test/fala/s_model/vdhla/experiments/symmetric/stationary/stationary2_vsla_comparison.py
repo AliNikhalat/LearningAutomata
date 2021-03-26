@@ -13,10 +13,10 @@ iteration_number = 1000
 action_number = 5
 
 reward_rate_1 = 0.1
-penalty_rate_1 = 0.01
+penalty_rate_1 = 0
 
 reward_rate_2 = 0.01
-penalty_rate_2 = 0.001
+penalty_rate_2 = 0
 
 s_vdhla_1 = SymmetricVariableDepthHybrid(
     action_number, 4, reward_rate_1, penalty_rate_1)
@@ -89,13 +89,13 @@ for i in range(iteration_number):
     favorable_vsla_action_probability_2.append(
         vsla_2.get_action_selection_status(0)[-1] / (i + 1))
 
-# print('VDHLA 4 : TNR {}'.format(s_vdhla_1.total_number_of_rewards[-1]))
-# print('VDHLA 4 : TNAS {}'.format(
-#     s_vdhla_1.total_number_of_action_switching[-1]))
+print('VDHLA 4 : TNR {}'.format(s_vdhla_1.total_number_of_rewards[-1]))
+print('VDHLA 4 : TNAS {}'.format(
+    s_vdhla_1.total_number_of_action_switching[-1]))
 
-# print('VSLA : TNR {}'.format(vsla_1.total_number_of_rewards[-1]))
-# print('VSLA : TNAS {}'.format(
-#     vsla_1.total_number_of_action_switching[-1]))
+print('VSLA : TNR {}'.format(vsla_1.total_number_of_rewards[-1]))
+print('VSLA : TNAS {}'.format(
+    vsla_1.total_number_of_action_switching[-1]))
 
 # print('VDHLA : Depth {}'.format(s_vdhla_1.fsla_state_number))
 # print(vsla.get_action_selection_status(0))

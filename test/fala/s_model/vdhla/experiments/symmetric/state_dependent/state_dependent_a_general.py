@@ -6,12 +6,12 @@ sys.path.insert(0, os.path.abspath(
 
 from fala.s_model.vdhla.symmetric_variable_depth_hybrid import *  # NOQA
 from fala.p_model.fsla.tsetlin import *  # NOQA
-from environment.markovian_switching import *  # NOQA
+from environment.state_dependent import *  # NOQA
 
-iteration_number = 10000
+iteration_number = 1000000
 
 
-action_number = 5
+action_number = 2
 reward_rate = 0.01
 penalty_rate = 0
 
@@ -40,40 +40,37 @@ favorable3_action_probability = []
 favorable5_action_probability = []
 favorable7_action_probability = []
 
-state_probability = [[0.9, 0.1, 0.3, 0.7, 0.1],
-                     [0.1, 0.9, 0.7, 0.6, 0.2],
-                     [0.3, 0.7, 0.5, 0.5, 0.3],
-                     [0.9, 0.9, 0.9, 0.4, 0.6]]
-
-transition_probability = [[0.3, 0.2, 0.1, 0.4],
-                          [0.1, 0.2, 0.5, 0.2],
-                          [0.2, 0.2, 0.2, 0.6],
-                          [0.2, 0.5, 0.1, 0.2]]
-
-# transition_probability = [[0.1, 0.4, 0.1, 0.1, 0.15, 0.15],
-#                           [0.1, 0.1, 0.4, 0.1, 0.15, 0.15],
-#                           [0.1, 0.1, 0.1, 0.4, 0.15, 0.15],
-#                           [0.4, 0.1, 0.1, 0.1, 0.15, 0.15],
-#                           [0.1, 0.1, 0.2, 0.2, 0.2, 0.2],
-#                           [0.2, 0.1, 0.1, 0.2, 0.1, 0.3]]
-
-# state_probability = [[0.8, 0.2],
-#                      [0.7, 0.3]]
-
-# state_probability = [[0.8, 0.05, 0.05, 0.05, 0.05],
-#                      [0.075, 0.7, 0.075, 0.075, 0.075]]
-
-# state_probability = [[0.8, 0.025, 0.025, 0.025, 0.025, 0.025, 0.025, 0.025, 0.025],
-#                      [0.0375, 0.8, 0.0375, 0.0375, 0.0375, 0.0375, 0.0375, 0.0375, 0.0375]]
-
-# transition_probability = [[0.2, 0.8],
-#                           [0.6, 0.4]]
-
 get_status = 0
 
 
-environment = SequenceMarkovianEnvironment(
-    action_number, state_probability, transition_probability, iteration_number)
+action_probability_list_1 = [0.9, 0.1]
+action_probability_list_2 = [0.9, 0.1]
+action_probability_list_3 = [0.9, 0.1]
+action_probability_list_4 = [0.9, 0.1]
+action_probability_list_5 = [0.9, 0.1]
+action_probability_list_6 = [0.9, 0.1]
+action_probability_list_7 = [0.9, 0.1]
+action_probability_list_8 = [0.9, 0.1]
+
+favorable_decrement_rate = 0.00002
+unfavorable_increment_rate = 0.0002
+
+environment_1 = StateDependentAEnvironment(
+    action_number, action_probability_list_1, favorable_decrement_rate, unfavorable_increment_rate)
+environment_2 = StateDependentAEnvironment(
+    action_number, action_probability_list_2, favorable_decrement_rate, unfavorable_increment_rate)
+environment_3 = StateDependentAEnvironment(
+    action_number, action_probability_list_3, favorable_decrement_rate, unfavorable_increment_rate)
+environment_4 = StateDependentAEnvironment(
+    action_number, action_probability_list_4, favorable_decrement_rate, unfavorable_increment_rate)
+environment_5 = StateDependentAEnvironment(
+    action_number, action_probability_list_5, favorable_decrement_rate, unfavorable_increment_rate)
+environment_6 = StateDependentAEnvironment(
+    action_number, action_probability_list_6, favorable_decrement_rate, unfavorable_increment_rate)
+environment_7 = StateDependentAEnvironment(
+    action_number, action_probability_list_7, favorable_decrement_rate, unfavorable_increment_rate)
+environment_8 = StateDependentAEnvironment(
+    action_number, action_probability_list_8, favorable_decrement_rate, unfavorable_increment_rate)
 
 for i in range(iteration_number):
     # vdhla 1 state
@@ -83,7 +80,7 @@ for i in range(iteration_number):
     else:
         chosen_action_1_vdhla = s_vdhla1.choose_random_action()
 
-    evaluated_action_vdhla1 = environment.evaluate_action(
+    evaluated_action_vdhla1 = environment_1.evaluate_action(
         chosen_action_1_vdhla)
     s_vdhla1.receive_environment_signal(evaluated_action_vdhla1)
     s_vdhla1.visualization_calculations()
@@ -98,7 +95,7 @@ for i in range(iteration_number):
     else:
         chosen_action_3_vdhla = s_vdhla3.choose_random_action()
 
-    evaluated_action_vdhla3 = environment.evaluate_action(
+    evaluated_action_vdhla3 = environment_2.evaluate_action(
         chosen_action_3_vdhla)
     s_vdhla3.receive_environment_signal(evaluated_action_vdhla3)
     s_vdhla3.visualization_calculations()
@@ -113,7 +110,7 @@ for i in range(iteration_number):
     else:
         chosen_action_5_vdhla = s_vdhla5.choose_random_action()
 
-    evaluated_action_vdhla5 = environment.evaluate_action(
+    evaluated_action_vdhla5 = environment_3.evaluate_action(
         chosen_action_5_vdhla)
     s_vdhla5.receive_environment_signal(evaluated_action_vdhla5)
     s_vdhla5.visualization_calculations()
@@ -128,7 +125,7 @@ for i in range(iteration_number):
     else:
         chosen_action_7_vdhla = s_vdhla7.choose_random_action()
 
-    evaluated_action_vdhla7 = environment.evaluate_action(
+    evaluated_action_vdhla7 = environment_4.evaluate_action(
         chosen_action_7_vdhla)
     s_vdhla7.receive_environment_signal(evaluated_action_vdhla7)
     s_vdhla7.visualization_calculations()
@@ -143,7 +140,7 @@ for i in range(iteration_number):
     else:
         chosen_action_1 = tsetlin_1state.choose_random_action()
 
-    evaluated_action_1 = environment.evaluate_action(chosen_action_1)
+    evaluated_action_1 = environment_5.evaluate_action(chosen_action_1)
     tsetlin_1state.receive_environment_signal(evaluated_action_1)
     tsetlin_1state.visualization_calculations()
 
@@ -157,7 +154,7 @@ for i in range(iteration_number):
     else:
         chosen_action_3 = tsetlin_3state.choose_random_action()
 
-    evaluated_action_3 = environment.evaluate_action(chosen_action_3)
+    evaluated_action_3 = environment_6.evaluate_action(chosen_action_3)
     tsetlin_3state.receive_environment_signal(evaluated_action_3)
     tsetlin_3state.visualization_calculations()
 
@@ -171,7 +168,7 @@ for i in range(iteration_number):
     else:
         chosen_action_5 = tsetlin_5state.choose_random_action()
 
-    evaluated_action_5 = environment.evaluate_action(chosen_action_5)
+    evaluated_action_5 = environment_7.evaluate_action(chosen_action_5)
     tsetlin_5state.receive_environment_signal(evaluated_action_5)
     tsetlin_5state.visualization_calculations()
 
@@ -185,14 +182,12 @@ for i in range(iteration_number):
     else:
         chosen_action_7 = tsetlin_7state.choose_random_action()
 
-    evaluated_action_7 = environment.evaluate_action(chosen_action_7)
+    evaluated_action_7 = environment_8.evaluate_action(chosen_action_7)
     tsetlin_7state.receive_environment_signal(evaluated_action_7)
     tsetlin_7state.visualization_calculations()
 
     favorable7_action_probability.append(
         tsetlin_7state.get_action_selection_status(get_status)[-1] / (i + 1))
-
-    environment.goto_next_episode()
 
 
 print('VDHLA 1 : TNR {}'.format(s_vdhla1.total_number_of_rewards[-1]))
@@ -225,6 +220,15 @@ print(s_vdhla1.fsla_state_number)
 print(s_vdhla3.fsla_state_number)
 print(s_vdhla5.fsla_state_number)
 print(s_vdhla7.fsla_state_number)
+
+print(environment_1.action_probability_list)
+print(environment_2.action_probability_list)
+print(environment_3.action_probability_list)
+print(environment_4.action_probability_list)
+print(environment_5.action_probability_list)
+print(environment_6.action_probability_list)
+print(environment_7.action_probability_list)
+print(environment_8.action_probability_list)
 
 # Plots
 # x_values = [i for i in range(iteration_number)]
