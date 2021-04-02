@@ -12,6 +12,7 @@ class AsymmetricArm:
         self.__fsla_depth_status = 1
         self.__fsla_state_transition_counter = 0
         self.__fsla_depth_transition_counter = 0
+        self.__fsla_min_state = 1
 
         self.__reward_rate = reward_rate
         self.__penalty_rate = penalty_rate
@@ -31,6 +32,11 @@ class AsymmetricArm:
     # *****************************************************************************************
     def set_depth_status(self, value):
         self.__fsla_depth_status = value
+
+    # *****************************************************************************************
+    @property
+    def state_number(self):
+        return self.__fsla_state_number
 
     # *****************************************************************************************
     def receive_environment_signal(self, beta):
@@ -93,7 +99,7 @@ class AsymmetricArm:
     # *****************************************************************************************
     def __update_fsla_depth(self):
         new_depth_decision = 0
-        if self.__fsla_state_number > 1:
+        if self.__fsla_state_number > self.__fsla_min_state:
             new_depth_decision = self.__variable_action_set.choose_action([0, 1, 2])  # NOQA
         else:
             new_depth_decision = self.__variable_action_set.choose_action([0, 1])  # NOQA

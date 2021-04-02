@@ -7,9 +7,9 @@ from asymmetric.asymmetric_arm import *  # NOQA
 
 
 class AsymmetricVariableDepthHybrid:
-    def __init__(self, action_number, state_number, reward_rate, penalty_rate):
+    def __init__(self, action_number, state_number_list, reward_rate, penalty_rate):
         self.__arm_number = action_number
-        self.__init_state_number = state_number
+        self.__init_state_number = state_number_list
 
         self.__reward_rate = reward_rate
         self.__penalty_rate = penalty_rate
@@ -18,7 +18,7 @@ class AsymmetricVariableDepthHybrid:
         self.__arm_manager = AsymmetricArmManager(self.__arm_number)
 
         self.__arm_list = [AsymmetricArm(
-            self.__init_state_number, self.__reward_rate, self.__penalty_rate, self.__arm_manager) for _ in range(self.__arm_number)]
+            self.__init_state_number[i], self.__reward_rate, self.__penalty_rate, self.__arm_manager) for i in range(self.__arm_number)]
 
         self.__asymmetric_arm_manager = None
 
@@ -30,13 +30,22 @@ class AsymmetricVariableDepthHybrid:
 
     # *****************************************************************************************
     @property
-    def get_total_number_of_rewards(self):
+    def total_number_of_rewards(self):
         return self.__total_number_of_rewards
 
     # *****************************************************************************************
     @property
-    def get_total_number_of_action_switching(self):
+    def total_number_of_action_switching(self):
         return self.__total_number_of_action_switching
+
+    # *****************************************************************************************
+    @property
+    def depth_vector(self):
+        depth_vector = []
+        for arm in self.__arm_list:
+            depth_vector.append(arm.state_number)
+
+        return depth_vector
 
     # *****************************************************************************************
     def get_action_selection_status(self, action_number):
