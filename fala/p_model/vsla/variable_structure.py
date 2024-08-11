@@ -139,7 +139,7 @@ class VariableStructure:
             if random_number <= sum:
                 return index
 
-        return probability_list.len()
+        return probability_list.len() - 1
 
     # *****************************************************************************************
     def __punish_automata(self):
